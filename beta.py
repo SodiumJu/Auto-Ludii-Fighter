@@ -289,16 +289,22 @@ def auto_click_actions(config_data, pos_data):
         log_path = config_data.get('log_path', "")
         total_steps = len(model_file_names)
         step_count = 0
+        print(f"Log Path: {log_path}")
         log_model_name, log_count, log_reestablish_num, log_remaining_fights = read_log(log_path)
         
         # remove previous models in the list
         if log_model_name != None:
+            print(f"Detected previous model: {log_model_name}")
             for i in range(len(model_file_names)):
                 if model_file_names[i] == log_model_name:
                     model_file_names = model_file_names[i:]
                     if log_remaining_fights <= 0:
                         model_file_names = model_file_names[1:]
                     break
+        else:
+            print("No previous model detected.")
+
+        print(f"{model_file_names}")
 
         for model_name in model_file_names:
             step_count += 1
@@ -717,6 +723,7 @@ if __name__ == "__main__":
             config_data['tmux_cmd'] = config.get('Settings', 'tmux_cmd', fallback="")
             config_data['pytesseract_path'] = config.get('Settings', 'pytesseract_path', fallback=r'C:\Program Files\Tesseract-OCR\tesseract.exe')
             config_data['screenshots_path'] = config.get('Settings', 'screenshots_path', fallback=r"screenshots")
+            config_data['log_path'] = config.get('Settings', 'log_path', fallback=r"log.txt")
 
             # 更新 Tesseract 路徑
             pytesseract.pytesseract.tesseract_cmd = config_data['pytesseract_path']
